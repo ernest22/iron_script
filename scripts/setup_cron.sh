@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Remove existing cron
+crontab -r
+
 # Write out current crontab
 crontab -l > mycron
 
@@ -9,6 +12,12 @@ echo "*/10 * * * * /root/iron_script/scripts/check_and_restart_journald.sh" >> m
 echo "*/10 * * * * /root/iron_script/scripts/export_peer_id.sh" >> mycron
 echo "*/10 * * * * /root/iron_script/scripts/update_script.sh" >> mycron
 echo "* * * * * /root/iron_script/scripts/export_quil_metrics.sh" >> mycron
+
+# Install new cron file
+crontab mycron
+
+# Remove temporary cron file
+rm mycron
 
 
 # Install new cron file
