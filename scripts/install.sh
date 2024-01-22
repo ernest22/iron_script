@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd ~
+
 # Update all packages
 sudo apt update
 sudo apt upgrade -y
@@ -23,7 +25,7 @@ tar -xvf node_exporter-1.7.0.linux-amd64.tar.gz
 # Move Node Exporter binary
 sudo mv node_exporter-1.7.0.linux-amd64/node_exporter /usr/local/bin/
 # Create Node Exporter service file
-sudo cp services/node_exporter.service /etc/systemd/system/
+sudo cp /root/iron_script/services/node_exporter.service /etc/systemd/system/
 # Reload systemd daemon
 sudo systemctl daemon-reload
 # Enable Node Exporter service
@@ -35,7 +37,7 @@ sudo mkdir -p /var/lib/node_exporter/textfile_collector
 
 # Install quilt Client
 git clone https://github.com/QuilibriumNetwork/ceremonyclient.git
-sudo cp services/quil.service /etc/systemd/system/
+sudo cp /root/iron_script/services/quil.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable quil.service
 
