@@ -46,7 +46,6 @@ sudo systemctl daemon-reload
 sudo systemctl enable quil.service
 
 # Run setup_cron.tabß
-chmod +x /root/iron_script/scripts/setup_cron.sh
 ./root/iron_script/scripts/setup_cron.sh
 
 # Start Node
