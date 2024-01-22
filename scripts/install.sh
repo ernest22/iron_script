@@ -36,14 +36,18 @@ sudo mkdir -p /var/lib/node_exporter
 sudo mkdir -p /var/lib/node_exporter/textfile_collector
 
 # Install quilt Client
-git clone https://github.com/QuilibriumNetwork/ceremonyclient.git
+if [ ! -d "ceremonyclient" ]; then
+    git clone https://github.com/QuilibriumNetwork/ceremonyclient.git
+else
+    echo "Directory ceremonyclient already exists"
+fi
 sudo cp /root/iron_script/services/quil.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable quil.service
 
-# Run setup_cron.tab
-chmod +x setup_cron.tab
-./setup_cron.tab
+# Run setup_cron.tabß
+chmod +x /root/iron_script/scripts/setup_cron.sh
+./root/iron_script/scripts/setup_cron.sh
 
 # Start Node
 sudo systemctl start quil.service
