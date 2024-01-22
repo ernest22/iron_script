@@ -49,6 +49,6 @@ sudo systemctl enable quil.service
 ./iron_script/scripts/setup_cron.sh
 
 # Start Node
-sudo systemctl start node_exporter.service
-sudo systemctl start quil.service
+sudo systemctl restart node_exporter.service
+sudo systemctl restart quil.service
 
