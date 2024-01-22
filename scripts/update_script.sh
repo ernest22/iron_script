@@ -5,3 +5,6 @@ cd /root/iron_script
 
 # Perform git pull to update the repository
 git pull
+
+cd /root/ceremonyclient
+git pull

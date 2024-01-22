@@ -18,8 +18,3 @@ crontab mycron
 
 # Remove temporary cron file
 rm mycron
-
-
-# Install new cron file
-crontab mycron
-rm mycron
