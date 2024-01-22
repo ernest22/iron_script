@@ -1,0 +1,14 @@
+[Unit]
+Description=Quil Node Service
+After=network.target
+
+[Service]
+Environment="GOEXPERIMENT=arenas"
+ExecStart=/usr/local/go/bin/go run /root/ceremonyclient/node/...
+WorkingDirectory=/root/ceremonyclient/node
+Restart=always
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
