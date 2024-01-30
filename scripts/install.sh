@@ -48,8 +48,11 @@ sudo cp /root/iron_script/services/quil.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable quil.service
 
-# Run setup_cron.tabß
+# Run setup_cron.sh
 ./iron_script/scripts/setup_cron.sh
+
+# Run setup_logrotate.sh
+./setup_logrotate.sh
 
 # Start Node
 sudo systemctl restart node_exporter.service
