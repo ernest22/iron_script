@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Remove existing cron
-crontab -r
+if crontab -l > /dev/null; then
+    crontab -r
+fi
 
 # Write out current crontab
 crontab -l > mycron
