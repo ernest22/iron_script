@@ -9,7 +9,7 @@ config_content="
     compress
     missingok
     notifempty
-    create 0640 node_exporter node_exporter
+    create 0640 root root
     postrotate
         /bin/systemctl restart node_exporter.service > /dev/null
     endscript
