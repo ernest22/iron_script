@@ -19,9 +19,23 @@ IN_ROUND=$(echo "$LATEST_ROUND_LOG" | grep -oP 'in_round":\K(true|false)')
 # Convert IN_ROUND to a numerical value (1 for true, 0 for false)
 IN_ROUND_NUM=$( [ "$IN_ROUND" == "true" ] && echo 1 || echo 0 )
 
-# Write the metrics to a Prometheus textfile
-echo "quil_my_balance $MY_BALANCE" > $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
-echo "quil_lobby_state{state=\"$LOBBY_STATE\"} 1" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
-echo "quil_network_peer_count $NETWORK_PEER_COUNT" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
-echo "quil_frame_number $FRAME_NUMBER" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
-echo "quil_in_round $IN_ROUND_NUM" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+# Check if each value is set, and if yes, export the data
+if [ -n "$MY_BALANCE" ]; then
+    echo "quil_my_balance $MY_BALANCE" > $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+fi
+
+if [ -n "$LOBBY_STATE" ]; then
+    echo "quil_lobby_state{state=\"$LOBBY_STATE\"} 1" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+fi
+
+if [ -n "$NETWORK_PEER_COUNT" ]; then
+    echo "quil_network_peer_count $NETWORK_PEER_COUNT" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+fi
+
+if [ -n "$FRAME_NUMBER" ]; then
+    echo "quil_frame_number $FRAME_NUMBER" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+fi
+
+if [ -n "$IN_ROUND_NUM" ]; then
+    echo "quil_in_round $IN_ROUND_NUM" >> $TEXTFILE_COLLECTor_DIR/quil_metrics.prom
+fi
