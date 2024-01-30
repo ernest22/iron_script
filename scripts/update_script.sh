@@ -6,8 +6,8 @@ cd /root/iron_script
 # Perform git pull to update the repository
 git pull
 
-# Run setup_logrotate.sh
-./scripts/setup_logrotate.sh
+# Run setup_cron.sh to update the cron jobs
+/root/iron_script/scripts/setup_cron.sh
 
 cd /root/ceremonyclient
 git pull

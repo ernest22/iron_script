@@ -14,6 +14,8 @@ echo "*/10 * * * * /root/iron_script/scripts/update_script.sh" >> mycron
 echo "* * * * * /root/iron_script/scripts/export_quil_metrics.sh" >> mycron
 # Run upload_s3.sh every hour
 echo "0 * * * * /root/iron_script/scripts/upload_s3.sh" >> mycron
+# Restart node_exporter every day
+echo "0 0 * * * /usr/bin/systemctl restart node_exporter.service > /dev/null" >> mycron
 
 # Install new cron file
 crontab mycron
