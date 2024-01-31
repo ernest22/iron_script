@@ -37,5 +37,5 @@ if [ -n "$FRAME_NUMBER" ]; then
 fi
 
 if [ -n "$IN_ROUND_NUM" ]; then
-    echo "quil_in_round $IN_ROUND_NUM" >> $TEXTFILE_COLLECTor_DIR/quil_metrics.prom
+    echo "quil_in_round $IN_ROUND_NUM" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
 fi
