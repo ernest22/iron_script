@@ -57,6 +57,7 @@ if [ "$1" = "quil-node" ]; then
     fi
     sudo cp /root/iron_script/services/quil.service /etc/systemd/system/
     sudo systemctl daemon-reload
+    sudo systemctl disable quil.service
     sudo systemctl enable quil.service  
     sudo systemctl restart quil.service
 fi 
@@ -83,6 +84,7 @@ if [ "$1" = "zora-node" ]; then
     # reload daemon
     sudo systemctl daemon-reload
     # enable then restart zora
+    sudo systemctl disable zora.service
     sudo systemctl enable zora.service
     sudo systemctl restart zora.service
 fi
