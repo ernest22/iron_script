@@ -6,7 +6,7 @@ After=network.target
 Restart=always
 User=root
 Group=root
-WorkingDirectory=/root/conduitxyz/node
+WorkingDirectory=/root/node
 ExecStart=/usr/bin/docker-compose up --build
 
 [Install]
