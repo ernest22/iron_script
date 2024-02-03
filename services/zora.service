@@ -1,13 +1,13 @@
 [Unit]
 Description=Zora Node Service
 After=network.target
-
 [Service]
 Restart=always
 User=root
 Group=root
 WorkingDirectory=/root/node
 ExecStart=/usr/bin/docker-compose up --build
+Environment="CONDUIT_NETWORK=zora-mainnet-0"
 
 [Install]
 WantedBy=multi-user.target
