@@ -1,0 +1,13 @@
+[Unit]
+Description=Zora Node Service
+After=network.target
+
+[Service]
+Restart=always
+User=root
+Group=root
+WorkingDirectory=/root/conduitxyz/node
+ExecStart=/usr/bin/docker-compose up --build
+
+[Install]
+WantedBy=multi-user.target

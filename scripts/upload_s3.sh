@@ -1,9 +1,21 @@
 #!/bin/bash
 
+# Get the first argument and set it as job variable, if no argument is passed, quit the script
+if [ -z "$1" ]; then
+    echo "No argument supplied"
+    exit 1
+fi
+
+# if the job is not quil-node quit the script
+if [ "$1" != "quil-node" ]; then
+    echo "Job is not quil-node"
+    exit 1
+fi
+
 # Define the path to the private key and the bucket name
 PRIVATE_KEY_PATH="/root/ceremonyclient/node/.config/keys.yml"
 CONFIG_KEY_PATH="/root/ceremonyclient/node/.config/config.yml"
-BUCKET_NAME="iron-node"
+BUCKET_NAME="iron-node/quil-node"
 
 # Check if private key file exists
 if [ ! -f "$PRIVATE_KEY_PATH" ]; then
