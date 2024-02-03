@@ -68,7 +68,7 @@ if [ "$1" = "zora-node" ]; then
         exit 1
     fi
     sudo apt install curl build-essential git screen jq pkg-config libssl-dev libclang-dev ca-certificates gnupg lsb-release -y
-    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose -y
 
     # Set up environment variable for every restart and for the current session
     echo "export CONDUIT_NETWORK=zora-mainnet-0" >> ~/.bashrc
