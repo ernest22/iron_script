@@ -75,7 +75,7 @@ if [ "$1" = "zora-node" ]; then
     export CONDUIT_NETWORK=zora-mainnet-0
     # Install Zora Node
     git clone https://github.com/conduitxyz/node.git
-    ./conduitxyz/node/download-config.py $CONDUIT_NETWORK
+    ./node/download-config.py $CONDUIT_NETWORK
     # Create .env file and create a line "OP_NODE_L1_ETH_RPC=https://eth-mainnet.g.alchemy.com/v2/alchemey_key"
     echo "OP_NODE_L1_ETH_RPC=https://eth-mainnet.g.alchemy.com/v2/$2" >> ./node/.env
     # copy zora service to system
