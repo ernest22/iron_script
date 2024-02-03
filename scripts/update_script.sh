@@ -2,7 +2,9 @@
 
 # Get the first argument and set it as job variable, if no argument is passed, print an error message 
 if [ -z "$1" ]; then
-    echo "No argument supplied"ß
+    echo "No argument supplied"
+    # Set $1 as "quil-node" to avoid errors
+    $1="quil-node"
 fi
 
 # Change directory to the repository location
