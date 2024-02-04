@@ -33,7 +33,6 @@ if [ ! -f "/usr/local/bin/node_exporter" ]; then
     sudo mv node_exporter-1.7.0.linux-amd64/node_exporter /usr/local/bin/
 else
     echo "Node Exporter already installed"
-    exit 1
 fi
 
 # Create Node Exporter service file
