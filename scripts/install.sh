@@ -105,6 +105,7 @@ if [ "$1" = "avail-node" ]; then
     sudo systemctl enable avail-node.service
     # Start Avail Node service
     sudo systemctl restart avail-node.service
+fi
 
 # Run setup_cron.sh
 ./iron_script/scripts/setup_cron.sh $1
