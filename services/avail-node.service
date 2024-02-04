@@ -8,7 +8,7 @@ User=root
 Type=simple
 Restart=always
 RestartSec=120
-ExecStart=/root/avail-node/data-avail -d /root/avail-node/data --chain goldberg --validator --name NPCNode
+ExecStart=/root/avail-node/data-avail -d /root/avail-node/data --chain goldberg --validator --name NPCNode --prometheus-external
 
 [Install]
 WantedBy=multi-user.target
