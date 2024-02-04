@@ -22,12 +22,20 @@ sudo apt install git -y
 # Install s3cmd
 sudo apt install s3cmd -y
 
-# Download Node Exporter
-wget https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
-# Extract Node Exporter
-tar -xvf node_exporter-1.7.0.linux-amd64.tar.gz
-# Move Node Exporter binary
-sudo mv node_exporter-1.7.0.linux-amd64/node_exporter /usr/local/bin/
+# Check if node_exporter is installed
+if [ ! -f "/usr/local/bin/node_exporter" ]; then
+    echo "Node Exporter not installed"
+    # Download Node Exporter
+    wget https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+    # Extract Node Exporter
+    tar -xvf node_exporter-1.7.0.linux-amd64.tar.gz
+    # Move Node Exporter binary
+    sudo mv node_exporter-1.7.0.linux-amd64/node_exporter /usr/local/bin/
+else
+    echo "Node Exporter already installed"
+    exit 1
+fi
+
 # Create Node Exporter service file
 sudo cp /root/iron_script/services/node_exporter.service /etc/systemd/system/
 # Reload systemd daemon
