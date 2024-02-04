@@ -1,0 +1,14 @@
+[Unit]
+Description=Avail Validator
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+User=root
+Type=simple
+Restart=always
+RestartSec=120
+ExecStart=/root/avail-node/data-avail -d /root/avail-node/data --chain goldberg --validator --name NPCNode
+
+[Install]
+WantedBy=multi-user.target

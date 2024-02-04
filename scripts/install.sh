@@ -89,7 +89,22 @@ if [ "$1" = "zora-node" ]; then
     sudo systemctl restart zora.service
 fi
 
-
+if [ "$1" = "avail-node" ]; then
+    # Download Avail Node
+    wget https://github.com/availproject/avail/releases/download/v1.10.0.0/x86_64-ubuntu-2204-data-avail.tar.gz
+    # Extract Avail Node
+    tar -xvf x86_64-ubuntu-2204-data-avail.tar.gz
+    # Move Avail Node into new directory avail-node
+    mkdir -p avail-node
+    mv data-avail avail-node/
+    # Copy Avail Node service file
+    sudo cp /root/iron_script/services/avail-node.service /etc/systemd/system/
+    # Reload systemd daemon
+    sudo systemctl daemon-reload
+    # Enable Avail Node service
+    sudo systemctl enable avail-node.service
+    # Start Avail Node service
+    sudo systemctl restart avail-node.service
 
 # Run setup_cron.sh
 ./iron_script/scripts/setup_cron.sh $1
