@@ -12,15 +12,15 @@ echo "Installing job: $1"
 cd ~
 
 # Update all packages
-sudo apt update
-sudo apt upgrade -y
+sudo apt-get update
+sudo apt-get upgrade -y
 
 # Install Tools
-sudo apt install vim -y
-sudo apt install git -y
+sudo apt-get install vim -y
+sudo apt-get install git -y
 
 # Install s3cmd
-sudo apt install s3cmd -y
+sudo apt-get install s3cmd -y
 
 # Check if node_exporter is installed
 if [ ! -f "/usr/local/bin/node_exporter" ]; then
@@ -75,7 +75,7 @@ if [ "$1" = "zora-node" ]; then
         echo "No alchemy key supplied"
         exit 1
     fi
-    sudo apt install curl build-essential git screen jq pkg-config libssl-dev libclang-dev ca-certificates gnupg lsb-release -y
+    sudo apt-get install curl build-essential git screen jq pkg-config libssl-dev libclang-dev ca-certificates gnupg lsb-release -y
     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose -y
 
     # Set up environment variable for every restart and for the current session
