@@ -70,9 +70,9 @@ if [ "$1" = "quil-node" ]; then
 fi 
 
 if [ "$1" = "zora-node" ]; then
-    # Check if arguement 2 is passed, which is the alchemy key
+    # Check if arguement 2 is passed
     if [ -z "$2" ]; then
-        echo "No alchemy key supplied"
+        echo "No ETH RPC supplied"
         exit 1
     fi
     sudo apt-get install curl build-essential git screen jq pkg-config libssl-dev libclang-dev ca-certificates gnupg lsb-release -y
@@ -84,8 +84,15 @@ if [ "$1" = "zora-node" ]; then
     # Install Zora Node
     git clone https://github.com/conduitxyz/node.git
     ./node/download-config.py $CONDUIT_NETWORK
+    if .env file does not exist, create it, else remove it and create a new one
+    if [ ! -f "./node/.env" ]; then
+        touch ./node/.env
+    else
+        rm ./node/.env
+        touch ./node/.env
+    fi
     # Create .env file and create a line "OP_NODE_L1_ETH_RPC=https://eth-mainnet.g.alchemy.com/v2/alchemey_key"
-    echo "OP_NODE_L1_ETH_RPC=https://eth-mainnet.g.alchemy.com/v2/$2" >> ./node/.env
+    echo "OP_NODE_L1_ETH_RPC=$2" >> ./node/.env
     # copy zora service to system
     sudo cp /root/iron_script/services/zora.service /etc/systemd/system/
     # reload daemon
