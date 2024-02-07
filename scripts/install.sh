@@ -84,7 +84,7 @@ if [ "$1" = "zora-node" ]; then
     # Install Zora Node
     git clone https://github.com/conduitxyz/node.git
     ./node/download-config.py $CONDUIT_NETWORK
-    if .env file does not exist, create it, else remove it and create a new one
+    #if .env file does not exist, create it, else remove it and create a new one
     if [ ! -f "./node/.env" ]; then
         touch ./node/.env
     else
