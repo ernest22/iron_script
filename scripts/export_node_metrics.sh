@@ -27,7 +27,10 @@ if [ "$1" == "quil-node" ]; then
     LEADER_FRAME_NUMBER=$(echo "$LEADER_FRAME" | grep -oP 'frame_number":\K\d+')
     # If Latest Frame Number has no value, set it to the frame number from the leader frame log
     if [ -z "$LATEST_FRAME_NUMBER" ]; then
-        FRAME_NUMBER=$LEADER_FRAME_NUMBER
+        # IF leader frame is not equal to 0, set the frame number to the leader frame number, else don't set it
+        if [ -n "$LEADER_FRAME_NUMBER" ]; then
+            FRAME_NUMBER=$LEADER_FRAME_NUMBER
+        fi
     else
         FRAME_NUMBER=$LATEST_FRAME_NUMBER
     fi
