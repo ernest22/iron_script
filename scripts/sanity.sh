@@ -22,7 +22,22 @@ if [ "$1" == "quil-node" ]; then
     then
         echo "Restarting $SERVICE_NAME because '$LOG_MESSAGE' appeared $OCCURRENCES times in the last 5 lines of logs"
         systemctl restart $SERVICE_NAME
+        # Exit the script
+        exit 0
     else
         echo "'$LOG_MESSAGE' did not appear multiple times in the last 5 lines of $SERVICE_NAME logs"
+    fi
+
+    # Check if the peer is below 20 from LATEST_PEERS_LOG
+    LATEST_PEERS_LOG=$(journalctl -u $SERVICE_NAME | grep "peers in store" | tail -1)
+    NETWORK_PEER_COUNT=$(echo "$LATEST_PEERS_LOG" | grep -oP 'network_peer_count":\K\d+')
+    if [ $NETWORK_PEER_COUNT -lt 20 ]
+    then
+        echo "Restarting $SERVICE_NAME because network_peer_count is $NETWORK_PEER_COUNT"
+        systemctl restart $SERVICE_NAME
+        # Exit the script
+        exit 0
+    else
+        echo "Network peer count is $NETWORK_PEER_COUNT"
     fi
 fi
