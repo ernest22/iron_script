@@ -23,11 +23,11 @@ if [ "$1" == "quil-node" ]; then
     MY_BALANCE=$(echo "$LATEST_APP_STATE_LOG" | grep -oP 'my_balance":\K\d+')
     LOBBY_STATE=$(echo "$LATEST_APP_STATE_LOG" | grep -oP 'lobby_state":"\K[^"]+')
     NETWORK_PEER_COUNT=$(echo "$LATEST_PEERS_LOG" | grep -oP 'network_peer_count":\K\d+')
-    LATEST_FRAME_NUMBER=$(echo "$LATEST_FRAME_LOG" | grep -oP 'frame_number":\K\d+')
-    # Get leader frame number from leader frame log
-    LEADER_FRAME_NUMBER=$(echo "$LEADER_FRAME" | grep -oP 'frame_number":\K\d+')
-    # Get frame number from the highest frame number between LATEST_FRAME_NUMBER and LEADER_FRAME_NUMBER
-    FRAME_NUMBER=$( [ "$LATEST_FRAME_NUMBER" -gt "$LEADER_FRAME_NUMBER" ] && echo "$LATEST_FRAME_NUMBER" || echo "$LEADER_FRAME_NUMBER" )
+    FRAME_NUMBER=$(echo "$LATEST_FRAME_LOG" | grep -oP 'frame_number":\K\d+')
+    # If Latest Frame Number has no value, set it to the frame number from the leader frame log
+    if [ -z "$FRAME_NUMBER" ]; then
+        FRAME_NUMBER=$(echo "$LEADER_FRAME" | grep -oP 'frame_number":\K\d+')
+    fi
     # Get another frame number from round log 
     ROUND_FRAME_NUMBER=$(echo "$LATEST_ROUND_LOG" | grep -oP 'frame_number":\K\d+')
     IN_ROUND=$(echo "$LATEST_ROUND_LOG" | grep -oP 'in_round":\K(true|false)')
@@ -47,7 +47,6 @@ if [ "$1" == "quil-node" ]; then
     if [ -n "$NETWORK_PEER_COUNT" ]; then
         echo "quil_network_peer_count $NETWORK_PEER_COUNT" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
-
     if [ -n "$FRAME_NUMBER" ]; then
         echo "quil_frame_number $FRAME_NUMBER" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
