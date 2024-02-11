@@ -1,0 +1,12 @@
+[Unit]
+Description=ar.io Node Service
+After=network.target
+[Service]
+Restart=always
+User=root
+Group=root
+WorkingDirectory=/root/ar-io-node
+ExecStart=/usr/bin/docker-compose up -d
+
+[Install]
+WantedBy=multi-user.target

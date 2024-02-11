@@ -121,6 +121,37 @@ if [ "$1" = "avail-node" ]; then
     sudo systemctl restart avail-node.service
 fi
 
+if [ "$1" = "ar-io-node" ]; then
+    # Update and download packages
+    sudo apt update -y && sudo apt upgrade -y && sudo apt install -y curl openssh-server docker-compose git certbot nginx sqlite3 build-essential && sudo systemctl enable ssh && curl -sSL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list && sudo apt-get update -y && sudo apt-get install -y yarn && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash && source ~/.bashrc && sudo ufw allow 22 80 443 && sudo ufw enable
+    # Install Node.js
+    nvm install 18.8.0 && nvm use 18.8.0
+    # Clone node repository
+    git clone -b main https://github.com/ar-io/ar-io-node
+    cd ar-io-node
+    # Create .env file if it does not exist
+    if [ ! -f ".env" ]; then
+        touch .env
+    else
+        rm .env
+        touch .env
+    fi
+    # Add environment variables to .env file 
+    echo "GRAPHQL_HOST=arweave.net" >> .env
+    echo "GRAPHQL_PORT=443" >> .env
+    echo "START_HEIGHT=0" >> .env
+    echo "RUN_OBSERVER=true" >> .env
+    
+    # Copy ar-io-node service file
+    sudo cp /root/iron_script/services/ar-io-node.service /etc/systemd/system/
+    # Reload systemd daemon
+    sudo systemctl daemon-reload
+    # Enable ar-io-node service
+    sudo systemctl enable ar-io-node.service
+    # Start ar-io-node service
+    sudo systemctl restart ar-io-node.service
+
+
 # Run setup_cron.sh
 ./iron_script/scripts/setup_cron.sh $1
 
