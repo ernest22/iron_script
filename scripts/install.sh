@@ -150,7 +150,7 @@ if [ "$1" = "ar-io-node" ]; then
     sudo systemctl enable ar-io-node.service
     # Start ar-io-node service
     sudo systemctl restart ar-io-node.service
-
+fi
 
 # Run setup_cron.sh
 ./iron_script/scripts/setup_cron.sh $1
