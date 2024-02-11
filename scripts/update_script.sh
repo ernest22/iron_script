@@ -19,5 +19,14 @@ git pull
 # Run setup_cron.sh to update the cron jobs
 /root/iron_script/scripts/setup_cron.sh $job
 
-cd /root/ceremonyclient
-git pull
+if [ "$job" == "quil-node" ]; then
+    # Change directory to the Quil Node repository location
+    cd /root/ceremonyclient
+    # Run git pull and if new changes are available, restart the Quil Node service
+    if git pull | grep -q 'Already up to date.'; then
+        echo "No new changes"
+    else
+        echo "New changes found, restarting Quil Node service"
+        sudo systemctl restart quil.service
+    fi
+fi
