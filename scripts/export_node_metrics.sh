@@ -34,8 +34,8 @@ if [ "$1" == "quil-node" ]; then
     else
         FRAME_NUMBER=$LATEST_FRAME_NUMBER
     fi
-    # Get another frame number from round log 
-    ROUND_FRAME_NUMBER=$(echo "$LATEST_ROUND_LOG" | grep -oP 'frame_number":\K\d+')
+    # Get another frame number from round log and if there is multiple frame numbers, get the first one
+    ROUND_FRAME_NUMBER=$(echo "$LATEST_ROUND_LOG" | grep -oP 'frame_number":\K\d+' | head -1)
     IN_ROUND=$(echo "$LATEST_ROUND_LOG" | grep -oP 'in_round":\K(true|false)')
 
     # Convert IN_ROUND to a numerical value (1 for true, 0 for false)
@@ -45,11 +45,9 @@ if [ "$1" == "quil-node" ]; then
     if [ -n "$MY_BALANCE" ]; then
         echo "quil_my_balance $MY_BALANCE" > $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
-
     if [ -n "$LOBBY_STATE" ]; then
         echo "quil_lobby_state{state=\"$LOBBY_STATE\"} 1" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
-
     if [ -n "$NETWORK_PEER_COUNT" ]; then
         echo "quil_network_peer_count $NETWORK_PEER_COUNT" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi

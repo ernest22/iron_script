@@ -125,7 +125,7 @@ fi
 ./iron_script/scripts/setup_cron.sh $1
 
 # Run setup_logrotate.sh
-./iron_script/scripts/setup_logrotate.sh
+# ./iron_script/scripts/setup_logrotate.sh
 
 # Start Node
 sudo systemctl restart node_exporter.service
