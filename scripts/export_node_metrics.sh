@@ -103,3 +103,38 @@ if [ "$1" == "zora-node" ]; then
     fi
 
 fi
+
+if [ "$1" == "lava-node" ]; then
+    # Get status
+    STATUS=$(/root/.lava/cosmovisor/current/bin/lavad status) 
+
+    # Extract the desired metrics from the STATUS
+    NETWORK=$(echo "$STATUS" | jq -r '.NodeInfo.network')
+    VERSION=$(echo "$STATUS" | jq -r '.NodeInfo.version')
+    LATEST_BLOCK_HEIGHT=$(echo "$STATUS" | jq -r '.SyncInfo.latest_block_height')
+    LATEST_BLOCK_TIME=$(echo "$STATUS" | jq -r '.SyncInfo.latest_block_time')
+    ADDRESS=$(echo "$STATUS" | jq -r '.ValidatorInfo.address')
+    VOTING_POWER=$(echo "$STATUS" | jq -r '.ValidatorInfo.voting_power')
+
+    # Export the metrics to the prometheus metrics file if they are set
+    if [ -n "$NETWORK" ]; then
+        echo "lava_network{network=\"$NETWORK\"} 1" > $TEXTFILE_COLLECTOR_DIR/lava_metrics.prom
+    fi
+    if [ -n "$VERSION" ]; then
+        echo "lava_version{version=\"$VERSION\"} 1" >> $TEXTFILE_COLLECTOR_DIR/lava_metrics.prom
+    fi
+    if [ -n "$LATEST_BLOCK_HEIGHT" ]; then
+        echo "lava_latest_block_height $LATEST_BLOCK_HEIGHT" >> $TEXTFILE_COLLECTOR_DIR/lava_metrics.prom
+    fi
+    if [ -n "$LATEST_BLOCK_TIME" ]; then
+        echo "lava_latest_block_time $LATEST_BLOCK_TIME" >> $TEXTFILE_COLLECTOR_DIR/lava_metrics.prom
+    fi
+    if [ -n "$ADDRESS" ]; then
+        echo "lava_address{address=\"$ADDRESS\"} 1" >> $TEXTFILE_COLLECTOR_DIR/lava_metrics.prom
+    fi
+    if [ -n "$VOTING_POWER" ]; then
+        echo "lava_voting_power $VOTING_POWER" >> $TEXTFILE_COLLECTOR_DIR/lava_metrics.prom
+    fi
+    
+fi
+    
