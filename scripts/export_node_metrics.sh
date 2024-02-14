@@ -127,6 +127,8 @@ if [ "$1" == "lava-node" ]; then
         echo "lava_latest_block_height $LATEST_BLOCK_HEIGHT" >> $TEXTFILE_COLLECTOR_DIR/lava_metrics.prom
     fi
     if [ -n "$LATEST_BLOCK_TIME" ]; then
+        # Convert the time (e.g. 2023-08-23T15:37:18.057334561Z) to unix timestamp
+        LATEST_BLOCK_TIME=$(date -d "$LATEST_BLOCK_TIME" +%s)
         echo "lava_latest_block_time $LATEST_BLOCK_TIME" >> $TEXTFILE_COLLECTOR_DIR/lava_metrics.prom
     fi
     if [ -n "$ADDRESS" ]; then
@@ -135,6 +137,6 @@ if [ "$1" == "lava-node" ]; then
     if [ -n "$VOTING_POWER" ]; then
         echo "lava_voting_power $VOTING_POWER" >> $TEXTFILE_COLLECTOR_DIR/lava_metrics.prom
     fi
-    
+
 fi
     
