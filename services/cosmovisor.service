@@ -1,0 +1,18 @@
+[Unit]
+Description=Cosmovisor daemon
+After=network-online.target
+[Service]
+Environment=DAEMON_NAME=lavad
+Environment=DAEMON_HOME=/root/.lava
+Environment=DAEMON_RESTART_AFTER_UPGRADE=true
+Environment=DAEMON_ALLOW_DOWNLOAD_BINARIES=true
+Environment=DAEMON_LOG_BUFFER_SIZE=512
+Environment=UNSAFE_SKIP_BACKUP=true
+User=root
+ExecStart=/root/go/bin/cosmovisor start --home=/root/.lava --p2p.seeds 3a445bfdbe2d0c8ee82461633aa3af31bc2b4dc0@testnet2-seed-node.lavanet.xyz:26656,e593c7a9ca61f5616119d6beb5bd8ef5dd28d62d@testnet2-seed-node2.lavanet.xyz:26656
+Restart=always
+RestartSec=3
+LimitNOFILE=infinity
+LimitNPROC=infinity
+[Install]
+WantedBy=multi-user.target
