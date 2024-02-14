@@ -152,7 +152,7 @@ if [ "$1" = "ar-io-node" ]; then
     sudo systemctl restart ar-io-node.service
 fi
 
-if [ "$1" = "lava-node"]; then
+if [ "$1" = "lava-node" ]; then
     # Update and download packages
     sudo apt install -y unzip logrotate git jq sed wget curl coreutils systemd
     # Create the temp dir for the installation
