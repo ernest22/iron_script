@@ -14,8 +14,8 @@ if [ "$1" == "quil-node" ]; then
     # Define the log message to check for
     LOG_MESSAGE="waiting for minimum peers"
 
-    # Get the number of occurrences of the log message in the last 5 lines of the service's logs
-    OCCURRENCES=$(journalctl -u $SERVICE_NAME | grep "$LOG_MESSAGE" | tail -5 | wc -l)
+    # Get the number of occurrences of the log message in the last min of the service logs and store it in OCCURRENCES
+    OCCURRENCES=$(journalctl -u $SERVICE_NAME --since "1 min ago" | grep -c "$LOG_MESSAGE" | wc -l)
 
     # If the log message appears more than once in the last 5 lines, restart the service
     if [ $OCCURRENCES -gt 1 ]
