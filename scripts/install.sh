@@ -211,8 +211,27 @@ if [ "$1" = "lava-node"]; then
     --overwrite
     cp genesis_json/genesis.json $lava_config_folder/genesis.json
 
-    # Copy ar-io-node service file
-    sudo cp /root/iron_script/services/cosmovisor.service /etc/systemd/system/
+    # Create Cosmovisor unit file
+    echo "[Unit]
+    Description=Cosmovisor daemon
+    After=network-online.target
+    [Service]
+    Environment="DAEMON_NAME=lavad"
+    Environment="DAEMON_HOME=${HOME}/.lava"
+    Environment="DAEMON_RESTART_AFTER_UPGRADE=true"
+    Environment="DAEMON_ALLOW_DOWNLOAD_BINARIES=true"
+    Environment="DAEMON_LOG_BUFFER_SIZE=512"
+    Environment="UNSAFE_SKIP_BACKUP=true"
+    User=$USER
+    ExecStart=${HOME}/go/bin/cosmovisor start --home=$lavad_home_folder --p2p.seeds $seed_node
+    Restart=always
+    RestartSec=3
+    LimitNOFILE=infinity
+    LimitNPROC=infinity
+    [Install]
+    WantedBy=multi-user.target
+    " >cosmovisor.service
+    sudo mv cosmovisor.service /lib/systemd/system/cosmovisor.service
 
     # Enable the cosmovisor service so that it will start automatically when the system boots
     sudo systemctl daemon-reload
