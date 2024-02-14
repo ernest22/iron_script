@@ -113,8 +113,8 @@ if [ "$1" == "lava-node" ]; then
     VERSION=$(echo "$STATUS" | jq -r '.NodeInfo.version')
     LATEST_BLOCK_HEIGHT=$(echo "$STATUS" | jq -r '.SyncInfo.latest_block_height')
     LATEST_BLOCK_TIME=$(echo "$STATUS" | jq -r '.SyncInfo.latest_block_time')
-    ADDRESS=$(echo "$STATUS" | jq -r '.ValidatorInfo.address')
-    VOTING_POWER=$(echo "$STATUS" | jq -r '.ValidatorInfo.voting_power')
+    ADDRESS=$(echo "$STATUS" | jq -r '.ValidatorInfo.Address')
+    VOTING_POWER=$(echo "$STATUS" | jq -r '.ValidatorInfo.VotingPower')
 
     # Export the metrics to the prometheus metrics file if they are set
     if [ -n "$NETWORK" ]; then
