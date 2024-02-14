@@ -238,6 +238,7 @@ if [ "$1" = "lava-node"]; then
     sudo systemctl enable cosmovisor.service
     sudo systemctl restart systemd-journald
     sudo systemctl restart cosmovisor.service
+fi
 
 # Run setup_cron.sh
 ./iron_script/scripts/setup_cron.sh $1
