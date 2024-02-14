@@ -81,7 +81,11 @@ if [ "$1" = "zora-node" ]; then
     echo "export CONDUIT_NETWORK=zora-mainnet-0" >> ~/.bashrc
     export CONDUIT_NETWORK=zora-mainnet-0
     # Install Zora Node
-    git clone https://github.com/conduitxyz/node.git
+    if [ ! -d "node" ]; then
+        git clone https://github.com/conduitxyz/node.git
+    else
+        echo "Directory node already exists"
+    fi
     ./node/download-config.py $CONDUIT_NETWORK
     #if .env file does not exist, create it, else remove it and create a new one
     if [ ! -f "./node/.env" ]; then
@@ -95,9 +99,9 @@ if [ "$1" = "zora-node" ]; then
     # copy zora service to system
     sudo cp /root/iron_script/services/zora.service /etc/systemd/system/
     # prune docker
-    docker system prune -a
+    docker system prune -a -f
     # reload daemon
-    sudo systemctl daemon-reload
+    sudo systemctl daemon-reload 
     # enable then restart zora
     sudo systemctl enable zora.service
     sudo systemctl restart zora.service
