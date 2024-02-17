@@ -18,6 +18,8 @@ sudo apt-get upgrade -y
 # Install Tools
 sudo apt-get install vim -y
 sudo apt-get install git -y
+# Install crontab
+sudo apt-get install cron -y
 
 # Install s3cmd
 sudo apt-get install s3cmd -y
