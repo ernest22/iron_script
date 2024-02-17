@@ -66,6 +66,12 @@ if [ "$1" == "quil-node" ]; then
     if [ -n "$IN_ROUND_NUM" ]; then
         echo "quil_in_round $IN_ROUND_NUM" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
+
+    # Get Node Version with "grep -o -P 'Node -.{0,7}' ~/ceremonyclient/node/main.go" e.g. Node - v1.2.7 and extract the version after v
+    NODE_VERSION=$(grep -o -P 'Node -.{0,7}' ~/ceremonyclient/node/main.go | grep -o -P '[0-9]+\.[0-9]+\.[0-9]+')
+    if [ -n "$NODE_VERSION" ]; then
+        echo "node_version{version=\"$NODE_VERSION\"} 1" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+    fi
 fi
 
 # Check if the job is zora-node
