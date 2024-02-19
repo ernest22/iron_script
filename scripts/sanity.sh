@@ -42,14 +42,14 @@ if [ "$1" == "quil-node" ]; then
     fi
 
     # Check "no peers available, skipping sync" in the last 1 min of logs
-    NO_PEERS_LOG=$(journalctl -u $SERVICE_NAME --since "1 min ago" | grep "no peers available, skipping sync")
-    if [ -n "$NO_PEERS_LOG" ]
-    then
-        echo "Restarting $SERVICE_NAME because 'no peers available, skipping sync' appeared in the last 1 min of logs"
-        systemctl restart $SERVICE_NAME
-        # Exit the script
-        exit 0
-    else
-        echo "'no peers available, skipping sync' did not appear in the last 1 min of $SERVICE_NAME logs"
-    fi
+    # NO_PEERS_LOG=$(journalctl -u $SERVICE_NAME --since "1 min ago" | grep "no peers available, skipping sync")
+    # if [ -n "$NO_PEERS_LOG" ]
+    # then
+    #     echo "Restarting $SERVICE_NAME because 'no peers available, skipping sync' appeared in the last 1 min of logs"
+    #     systemctl restart $SERVICE_NAME
+    #     # Exit the script
+    #     exit 0
+    # else
+    #     echo "'no peers available, skipping sync' did not appear in the last 1 min of $SERVICE_NAME logs"
+    # fi
 fi
