@@ -30,3 +30,15 @@ if [ "$job" == "quil-node" ]; then
         sudo systemctl restart quil.service
     fi
 fi
+
+if [ "$job" == "zora-node"]; then
+    # Change directory to the Zora Node repository location
+    cd /root/node
+    # Run git log -1 and check if the latest commit is d92c13d42e4d5d0f2a0ffbe1293d7af58a3f0c5c, if not git checkout and restart the Zora Node service
+    if git log -1 | grep -q 'd92c13d42e4d5d0f2a0ffbe1293d7af58a3f0c5c'; then
+        echo "No new changes"
+    else
+        echo "New changes found, restarting Zora Node service"
+        git checkout d92c13d42e4d5d0f2a0ffbe1293d7af58a3f0c5c
+        sudo systemctl restart zora.service
+fi
