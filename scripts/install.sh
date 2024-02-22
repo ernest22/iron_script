@@ -50,6 +50,8 @@ sudo mkdir -p /var/lib/node_exporter/textfile_collector
 
 # Install Quil Node if job is quil-node
 if [ "$1" = "quil-node" ]; then
+    # Remove go downloaded if it exists
+    sudo rm -rf go1.20.13.linux-amd64.tar.*
     # Install Go
     wget https://go.dev/dl/go1.20.13.linux-amd64.tar.gz
     sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.20.13.linux-amd64.tar.gz
