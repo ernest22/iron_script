@@ -41,4 +41,5 @@ if [ "$job" == "zora-node"]; then
         echo "New changes found, restarting Zora Node service"
         git checkout d92c13d42e4d5d0f2a0ffbe1293d7af58a3f0c5c
         sudo systemctl restart zora.service
+    fi
 fi
