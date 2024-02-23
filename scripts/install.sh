@@ -79,7 +79,16 @@ if [ "$1" = "zora-node" ]; then
         exit 1
     fi
     sudo apt-get install curl build-essential git screen jq pkg-config libssl-dev libclang-dev ca-certificates gnupg lsb-release -y
-    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose -y
+    # Check if docker is installed and install it if it is not
+    if [ ! -f "/usr/bin/docker" ]; then
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+    else
+        echo "Docker already installed"
+    fi
+    sudo apt-get install docker-compose -y
 
     # Set up environment variable for every restart and for the current session
     echo "export CONDUIT_NETWORK=zora-mainnet-0" >> ~/.bashrc
