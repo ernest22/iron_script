@@ -260,15 +260,17 @@ fi
 if [ "$1" = "heurist-miner" ]; then
     # Update GPU drivers
     sudo ubuntu-drivers autoinstall
-    # Install Miniconda 
+    # Install Miniconda if conda is not installed
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
     bash Miniconda3-latest-Linux-x86_64.sh
     # Create a Conda Environment
     conda create --name gpu-3-11 python=3.11
     conda activate gpu-3-11
     # Install CUDA Toolkit
-    wget https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda_12.1.0_530.30.02_linux.run
-    sudo sh cuda_12.1.0_530.30.02_linux.run
+    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.1-1_all.deb
+    sudo dpkg -i cuda-keyring_1.1-1_all.deb
+    sudo apt-get update
+    sudo apt-get -y install cuda
     # Install PyTorch with GPU Support
     conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
     # Download Miner Scripts
