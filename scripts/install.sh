@@ -260,11 +260,18 @@ fi
 if [ "$1" = "heurist-miner" ]; then
     # Update GPU drivers
     sudo ubuntu-drivers autoinstall
-    # Install Miniconda if conda is not installed
-    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-    bash Miniconda3-latest-Linux-x86_64.sh
-    # Create a Conda Environment
-    conda create --name gpu-3-11 python=3.11
+    # Install Miniconda if conda is not installed with which conda
+    if ! command -v conda &> /dev/null
+    then
+        wget https://repo.anaconda.com/miniconda/Miniconda3-py39_4.10.3-Linux-x86_64.sh
+        bash Miniconda3-py39_4.10.3-Linux-x86_64.sh
+    fi
+    # Create a Conda Environment if it does not exist
+    if ! conda env list | grep -q gpu-3-11
+    then
+        conda create --name gpu-3-11 python=3.11
+    fi
+    # Activate the Conda Environment
     conda activate gpu-3-11
     # Install CUDA Toolkit
     wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.1-1_all.deb
