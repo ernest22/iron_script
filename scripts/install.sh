@@ -274,8 +274,8 @@ if [ "$1" = "heurist-miner" ]; then
     # Activate the Conda Environment
     conda activate gpu-3-11
     # Install CUDA Toolkit
-    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.1-1_all.deb
-    sudo dpkg -i cuda-keyring_1.1-1_all.deb
+    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
+    sudo dpkg -i cuda-keyring_1.0-1_all.deb
     sudo apt-get update
     sudo apt-get -y install cuda
     # Install PyTorch with GPU Support
