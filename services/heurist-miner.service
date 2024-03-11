@@ -1,0 +1,13 @@
+[Unit]
+Description=Heurist Miner Service
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/root/miner-release
+Environment="PATH=/home/user/miniconda3/bin:/usr/bin:/bin:/opt/conda/condabin:$PATH"
+ExecStart=bash -c 'eval "$(conda shell.bash hook)" && conda activate gpu-3-11 && python3 sd-miner-v0.0.4.py -y'
+
+[Install]
+WantedBy=multi-user.target

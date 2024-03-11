@@ -257,6 +257,33 @@ if [ "$1" = "lava-node" ]; then
     sudo systemctl restart cosmovisor.service
 fi
 
+if [ "$1" = "heurist-miner" ]; then
+    # Update GPU drivers
+    sudo ubuntu-drivers autoinstall
+    # Install Miniconda 
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    bash Miniconda3-latest-Linux-x86_64.sh
+    # Create a Conda Environment
+    conda create --name gpu-3-11 python=3.11
+    conda activate gpu-3-11
+    # Install CUDA Toolkit
+    wget https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda_12.1.0_530.30.02_linux.run
+    sudo sh cuda_12.1.0_530.30.02_linux.run
+    # Install PyTorch with GPU Support
+    conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
+    # Download Miner Scripts
+    cd 
+    git clone https://github.com/ernest22/miner-release.git
+    # Copy miner service file from iron_script in home directory to /etc/systemd/system
+    sudo cp $HOME/iron_script/services/heurist-miner.service /etc/systemd/system/
+    # Reload systemd daemon
+    sudo systemctl daemon-reload
+    # Enable Heurist Miner service
+    sudo systemctl enable heurist-miner.service
+    # Start Heurist Miner service
+    sudo systemctl restart heurist-miner.service
+
+fi 
 
 
 cd

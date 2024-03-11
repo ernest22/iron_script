@@ -1,0 +1,13 @@
+[Unit]
+Description=Heurist Stat Service
+
+[Service]
+ExecStart=/root/.local/share/virtualenvs/iron_script-_GBEOWoP/bin/python3 /root/iron_script/heurist_stat.py
+Restart=always
+User=root
+Group=root
+Environment="PATH=/root/.local/share/virtualenvs/iron_script-_GBEOWoP/bin"
+WorkingDirectory=/root/iron_script
+
+[Install]
+WantedBy=multi-user.target

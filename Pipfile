@@ -9,6 +9,8 @@ python-dotenv = "*"
 paramiko = "*"
 pyyaml = "*"
 pandas = "*"
+vastai = "*"
+prometheus-client = "*"
 
 [dev-packages]
 
