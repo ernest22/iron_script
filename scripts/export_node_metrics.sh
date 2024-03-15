@@ -41,6 +41,9 @@ if [ "$1" == "quil-node" ]; then
     # Convert IN_ROUND to a numerical value (1 for true, 0 for false)
     IN_ROUND_NUM=$( [ "$IN_ROUND" == "true" ] && echo 1 || echo 0 )
 
+    # Clear the file before writing new metrics
+    > $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+
     # Check if each value is set, and if yes, export the data
     if [ -n "$MY_BALANCE" ]; then
         echo "quil_my_balance $MY_BALANCE" > $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
