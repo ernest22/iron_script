@@ -67,8 +67,8 @@ if [ "$1" == "quil-node" ]; then
         echo "quil_in_round $IN_ROUND_NUM" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
 
-    # Get Node Version with "grep -o -P 'Node -.{0,7}' ~/ceremonyclient/node/main.go" e.g. Node - v1.2.7 or v1.2.10 and extract the version after v
-    NODE_VERSION=$(grep -o -P 'Node -.+' ~/ceremonyclient/node/main.go | grep -o -P '\d+\.\d+\.\d+')
+    # Get Node Version from the ~/ceremonyclient/node/p2p/blossomsub.go code e.g. var ANNOUNCE = "quilibrium-1.4.8-sunset-ceasefire" and extract the version after quilibrium-
+    NODE_VERSION=$(grep -o -P '(?<=ANNOUNCE = "quilibrium-)[^"]+' ~/ceremonyclient/node/p2p/blossomsub.go)
     if [ -n "$NODE_VERSION" ]; then
         echo "node_version{version=\"$NODE_VERSION\"} 1" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
