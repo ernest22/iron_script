@@ -16,6 +16,7 @@ if [ "$1" == "quil-node" ]; then
     LATEST_PEERS_LOG=$(journalctl -u quil.service | grep "peers in store" | tail -1)
     LATEST_FRAME_LOG=$(journalctl -u quil.service | grep "got clock frame" | tail -1)
     LATEST_ROUND_LOG=$(journalctl -u quil.service | grep "\"round in progress\"" | tail -1)
+    LATEST_VERSION_LOG=$(journalctl -u quil.service | grep "Quilibrium Node - v" | tail -1)
     # Get leader frame from "returning leader frame" log
     LEADER_FRAME=$(journalctl -u quil.service | grep "returning leader frame" | tail -1)
 
@@ -25,6 +26,8 @@ if [ "$1" == "quil-node" ]; then
     NETWORK_PEER_COUNT=$(echo "$LATEST_PEERS_LOG" | grep -oP 'network_peer_count":\K\d+')
     LATEST_FRAME_NUMBER=$(echo "$LATEST_FRAME_LOG" | grep -oP 'frame_number":\K\d+')
     LEADER_FRAME_NUMBER=$(echo "$LEADER_FRAME" | grep -oP 'frame_number":\K\d+')
+    # Get version from log like Quilibrium Node - v1.4.13 – Sunset, only get the version number, i.e. 1.4.13
+    NODE_VERSION=$(echo "$LATEST_VERSION_LOG" | grep -oP 'Quilibrium Node - v\K\d+\.\d+\.\d+')
     # If Latest Frame Number has no value, set it to the frame number from the leader frame log
     if [ -z "$LATEST_FRAME_NUMBER" ]; then
         # IF leader frame is not equal to 0, set the frame number to the leader frame number, else don't set it
@@ -69,9 +72,6 @@ if [ "$1" == "quil-node" ]; then
     if [ -n "$IN_ROUND_NUM" ]; then
         echo "quil_in_round $IN_ROUND_NUM" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
-
-    # Get Node Version from building and running the get_version.go file in directory /root/iron_script/get_version.go
-    NODE_VERSION=$(cd /root/iron_script/ && /usr/local/go/bin/go run get_version.go)
     if [ -n "$NODE_VERSION" ]; then
         echo "node_version{version=\"$NODE_VERSION\"} 1" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
