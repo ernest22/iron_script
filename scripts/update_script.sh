@@ -20,6 +20,16 @@ git pull
 /root/iron_script/scripts/setup_cron.sh $job
 
 if [ "$job" == "quil-node" ]; then
+    # Check if the disk usage is above 95%, if yes stop the Quil Node service, and wipe the store directory rm -rf /root/ceremonyclient/node/.config/store
+    DISK_USAGE=$(df / | awk 'END{print $5}' | cut -d'%' -f1)
+    if [ $DISK_USAGE -gt 95 ]; then
+        echo "Disk usage is above 95%, stopping Quil Node service and wiping store directory"
+        sudo systemctl stop quil.service
+        rm -rf /root/ceremonyclient/node/.config/store
+        sudo systemctl start quil.service
+        echo "Quil Node service restarted"
+    fi
+
     # Change directory to the Quil Node repository location
     cd /root/ceremonyclient
     # Run git pull and if new changes are available, restart the Quil Node service
