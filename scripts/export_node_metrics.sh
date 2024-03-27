@@ -70,8 +70,8 @@ if [ "$1" == "quil-node" ]; then
         echo "quil_in_round $IN_ROUND_NUM" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
 
-    # Get Node Version from the ~/ceremonyclient/node/p2p/blossomsub.go code e.g. var ANNOUNCE = "quilibrium-1.4.8-sunset-ceasefire" and extract the version after quilibrium-
-    NODE_VERSION=$(grep -o -P '(?<=ANNOUNCE = "quilibrium-)[^"]+' ~/ceremonyclient/node/p2p/blossomsub.go)
+    # Get Node Version from building and running the get_version.go file in directory /root/iron_script/get_version.go
+    NODE_VERSION=$(cd /root/iron_script/ && /usr/local/go/bin/go run get_version.go)
     if [ -n "$NODE_VERSION" ]; then
         echo "node_version{version=\"$NODE_VERSION\"} 1" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
