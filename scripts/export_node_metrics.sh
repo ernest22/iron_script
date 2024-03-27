@@ -11,15 +11,16 @@ TEXTFILE_COLLECTOR_DIR="/var/lib/node_exporter/textfile_collector"
 
 # Check if the job is quil-node
 if [ "$1" == "quil-node" ]; then
+    LOG_OUTPUT=$(journalctl -u quil.service)
     # Extract the latest relevant log entries
-    LATEST_APP_STATE_LOG=$(journalctl -u quil.service | grep "current application state" | tail -1)
-    LATEST_PEERS_LOG=$(journalctl -u quil.service | grep "peers in store" | tail -1)
-    LATEST_FRAME_LOG=$(journalctl -u quil.service | grep "got clock frame" | tail -1)
-    LATEST_ROUND_LOG=$(journalctl -u quil.service | grep "\"round in progress\"" | tail -1)
-    LATEST_VERSION_LOG=$(journalctl -u quil.service | grep "Quilibrium Node - v" | tail -1)
-    LATEST_CHECKPEER_LOG=$(journalctl -u quil.service | grep "checking peer list" | tail -1)
+    LATEST_APP_STATE_LOG=$(echo "$LOG_OUTPUT" | grep "current application state" | tail -1)
+    LATEST_PEERS_LOG=$(echo "$LOG_OUTPUT" | grep "peers in store" | tail -1)
+    LATEST_FRAME_LOG=$(echo "$LOG_OUTPUT" | grep "got clock frame" | tail -1)
+    LATEST_ROUND_LOG=$(echo "$LOG_OUTPUT" | grep "\"round in progress\"" | tail -1)
+    LATEST_VERSION_LOG=$(echo "$LOG_OUTPUT" | grep "Quilibrium Node - v" | tail -1)
+    LATEST_CHECKPEER_LOG=$(echo "$LOG_OUTPUT" | grep "checking peer list" | tail -1)
     # Get leader frame from "returning leader frame" log
-    LEADER_FRAME=$(journalctl -u quil.service | grep "returning leader frame" | tail -1)
+    LEADER_FRAME=$(echo "$LOG_OUTPUT" | grep "returning leader frame" | tail -1)
 
     # Parse values from the log entries
     MY_BALANCE=$(echo "$LATEST_APP_STATE_LOG" | grep -oP 'my_balance":\K\d+')
