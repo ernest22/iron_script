@@ -29,14 +29,15 @@ if [ "$1" == "quil-node" ]; then
     # Get version from log like Quilibrium Node - v1.4.13 – Sunset, only get the version number, i.e. 1.4.13
     NODE_VERSION=$(echo "$LATEST_VERSION_LOG" | grep -oP 'Quilibrium Node - v\K\d+\.\d+\.\d+')
     # If Latest Frame Number has no value, set it to the frame number from the leader frame log
-    if [ -z "$LATEST_FRAME_NUMBER" ]; then
-        # IF leader frame is not equal to 0, set the frame number to the leader frame number, else don't set it
-        if [ -n "$LEADER_FRAME_NUMBER" ]; then
-            FRAME_NUMBER=$LEADER_FRAME_NUMBER
-        fi
-    else
-        FRAME_NUMBER=$LATEST_FRAME_NUMBER
-    fi
+    # if [ -z "$LATEST_FRAME_NUMBER" ]; then
+    #     # IF leader frame is not equal to 0, set the frame number to the leader frame number, else don't set it
+    #     if [ -n "$LEADER_FRAME_NUMBER" ]; then
+    #         FRAME_NUMBER=$LEADER_FRAME_NUMBER
+    #     fi
+    # else
+    #     FRAME_NUMBER=$LATEST_FRAME_NUMBER
+    # fi
+    FRAME_NUMBER=$LATEST_FRAME_NUMBER
     # Get another frame number from round log and if there is multiple frame numbers, get the first one
     ROUND_FRAME_NUMBER=$(echo "$LATEST_ROUND_LOG" | grep -oP 'frame_number":\K\d+' | head -1)
     IN_ROUND=$(echo "$LATEST_ROUND_LOG" | grep -oP 'in_round":\K(true|false)')
