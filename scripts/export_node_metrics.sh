@@ -27,9 +27,9 @@ if [ "$1" == "quil-node" ]; then
     NETWORK_PEER_COUNT=$(echo "$LATEST_PEERS_LOG" | grep -oP 'network_peer_count":\K\d+')
     LATEST_FRAME_NUMBER=$(echo "$LATEST_FRAME_LOG" | grep -oP 'frame_number":\K\d+')
     LEADER_FRAME_NUMBER=$(echo "$LEADER_FRAME" | grep -oP 'frame_number":\K\d+')
-    HEAD_FRAME_NUMBER=$(echo "$LEADER_FRAME" | grep -oP 'current_head_frame":\K\d+')
+    HEAD_FRAME_NUMBER=$(echo "$LATEST_CHECKPEER_LOG" | grep -oP 'current_head_frame":\K\d+')
     # Get version from log like Quilibrium Node - v1.4.13 – Sunset, only get the version number, i.e. 1.4.13
-    NODE_VERSION=$(echo "$LATEST_CHECKPEER_LOG" | grep -oP 'Quilibrium Node - v\K\d+\.\d+\.\d+')
+    NODE_VERSION=$(echo "$LATEST_VERSION_LOG" | grep -oP 'Quilibrium Node - v\K\d+\.\d+\.\d+')
     # If Latest Frame Number has no value, set it to the frame number from the leader frame log
     # if [ -z "$LATEST_FRAME_NUMBER" ]; then
     #     # IF leader frame is not equal to 0, set the frame number to the leader frame number, else don't set it
