@@ -22,10 +22,9 @@ echo "*/10 * * * * /root/iron_script/scripts/update_script.sh $1" >> mycron
 # echo "0 0 * * * /usr/bin/systemctl restart node_exporter.service > /dev/null" >> mycron
 # Run sanity check every 1 hour
 echo "0 * * * * /root/iron_script/scripts/sanity.sh $1" >> mycron
-# Export peer id and metrics according to the job
-echo "*/10 * * * * /root/iron_script/scripts/export_peer_id.sh $1" >> mycron
-echo "* * * * * /root/iron_script/scripts/export_node_metrics.sh $1" >> mycron
-
+# Export peer id and metrics according to the job and prevent the script from running multiple times at the same time by using flock
+echo "*/10 * * * * /usr/bin/flock -n /tmp/export_peer_id.lock /root/iron_script/scripts/export_peer_id.sh $1" >> mycron
+echo "* * * * * /usr/bin/flock -n /tmp/export_node_metrics.lock /root/iron_script/scripts/export_node_metrics.sh $1" >> mycron
 echo "0 * * * * /root/iron_script/scripts/upload_s3.sh $1" >> mycron
 
 
