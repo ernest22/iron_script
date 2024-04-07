@@ -11,7 +11,7 @@ TEXTFILE_COLLECTOR_DIR="/var/lib/node_exporter/textfile_collector"
 
 # Check if the job is quil-node
 if [ "$1" == "quil-node" ]; then
-    LOG_OUTPUT=$(journalctl -u quil.service)
+    LOG_OUTPUT=$(journalctl -u quil.service --since "1 hour ago")
     # Extract the latest relevant log entries
     LATEST_APP_STATE_LOG=$(echo "$LOG_OUTPUT" | grep "current application state" | tail -1)
     LATEST_PEERS_LOG=$(echo "$LOG_OUTPUT" | grep "peers in store" | tail -1)
