@@ -19,6 +19,7 @@ if [ "$1" == "quil-node" ]; then
     LATEST_ROUND_LOG=$(echo "$LOG_OUTPUT" | grep "\"round in progress\"" | tail -1)
     LATEST_VERSION_LOG=$(echo "$LOG_OUTPUT" | grep "Quilibrium Node - v" | tail -1)
     LATEST_CHECKPEER_LOG=$(echo "$LOG_OUTPUT" | grep "checking peer list" | tail -1)
+    LATEST_MASTER_FRAME_LOG=$(echo "$LOG_OUTPUT" | grep "master frame synchronization" | tail -1)
     # Get leader frame from "returning leader frame" log
     LEADER_FRAME=$(echo "$LOG_OUTPUT" | grep "returning leader frame" | tail -1)
 
@@ -29,6 +30,8 @@ if [ "$1" == "quil-node" ]; then
     LATEST_FRAME_NUMBER=$(echo "$LATEST_FRAME_LOG" | grep -oP 'frame_number":\K\d+')
     LEADER_FRAME_NUMBER=$(echo "$LEADER_FRAME" | grep -oP 'frame_number":\K\d+')
     HEAD_FRAME_NUMBER=$(echo "$LATEST_CHECKPEER_LOG" | grep -oP 'current_head_frame":\K\d+')
+    MASTER_FRAME_HEAD=$(echo "$LATEST_MASTER_FRAME_LOG" | grep -oP 'master_frame_head":\K\d+')
+    MAX_DATA_FRAME_TARGET=$(echo "$LATEST_MASTER_FRAME_LOG" | grep -oP 'max_data_frame_target":\K\d+')
     # Get version from log like Quilibrium Node - v1.4.13 – Sunset, only get the version number, i.e. 1.4.13
     NODE_VERSION=$(echo "$LATEST_VERSION_LOG" | grep -oP 'Quilibrium Node - v\K\d+\.\d+\.\d+')
     # If Latest Frame Number has no value, set it to the frame number from the leader frame log
@@ -81,6 +84,12 @@ if [ "$1" == "quil-node" ]; then
     fi
     if [ -n "$HEAD_FRAME_NUMBER" ]; then
         echo "quil_head_frame_number $HEAD_FRAME_NUMBER" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+    fi
+    if [ -n "$MASTER_FRAME_HEAD" ]; then
+        echo "quil_master_frame_head $MASTER_FRAME_HEAD" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+    fi
+    if [ -n "$MAX_DATA_FRAME_TARGET" ]; then
+        echo "quil_max_data_frame_target $MAX_DATA_FRAME_TARGET" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
 fi
 
