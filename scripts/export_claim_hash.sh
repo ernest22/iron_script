@@ -19,6 +19,11 @@ TEXTFILE_COLLECTOR_DIR="/var/lib/node_exporter/textfile_collector"
 if [ "$1" == "quil-node" ]; then
     # Check if claim_hash.prom already exists and skip the command if it does
     ADDRESS=$2
+    # Check if address is empty or "NA"
+    if [ -z "$ADDRESS" ] || [ "$ADDRESS" == "NA" ]; then
+        echo "SKIP Address not found"
+        exit 1
+    fi
     # Run your command and capture the output
     OUTPUT=$(cd /root/ceremonyclient/client/ && GOEXPERIMENT=arenas go build -o qclient main.go && ./qclient cross-mint $ADDRESS)
     
