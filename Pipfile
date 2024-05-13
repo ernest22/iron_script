@@ -11,6 +11,7 @@ pyyaml = "*"
 pandas = "*"
 vastai = "*"
 prometheus-client = "*"
+base58 = "*"
 
 [dev-packages]
 
