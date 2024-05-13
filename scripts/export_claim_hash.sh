@@ -25,7 +25,7 @@ if [ "$1" == "quil-node" ]; then
         exit 1
     fi
     # Run your command and capture the output
-    OUTPUT=$(cd /root/ceremonyclient/client/ && GOEXPERIMENT=arenas go build -o qclient main.go && ./qclient cross-mint $ADDRESS)
+    OUTPUT=$(cd /root/ceremonyclient/client/ && GOEXPERIMENT=arenas /usr/local/go/bin/go build -o qclient main.go && ./qclient cross-mint $ADDRESS)
     
     # Extract Claim Hash
     HASH=$(echo "$OUTPUT")
