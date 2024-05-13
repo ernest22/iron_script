@@ -35,7 +35,7 @@ if [ "$1" == "quil-node" ]; then
         echo "SKIP Claim Hash not found"
     else
         # Export the output as a Prometheus metric
-        echo "claim_hash{quil_claim_hash=\"$HASH\"} 1" > $TEXTFILE_COLLECTOR_DIR/claim_hash.prom
+        echo "quil_claim_hash{claim_hash=\"$HASH\"} 1" > $TEXTFILE_COLLECTOR_DIR/claim_hash.prom
         echo "$HASH"
     fi
 fi
