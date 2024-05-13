@@ -21,6 +21,7 @@ if [ "$1" == "quil-node" ]; then
     if [ -f "$TEXTFILE_COLLECTOR_DIR/claim_hash.prom" ]; then
         echo "SKIP claim_hash.prom already exists. Skipping command."
     else
+        ADDRESS=$2
         # Run your command and capture the output
         OUTPUT=$(cd /root/ceremonyclient/client/ && GOEXPERIMENT=arenas go build -o qclient main.go && ./qclient cross-mint $ADDRESS)
         
