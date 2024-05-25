@@ -48,11 +48,11 @@ if [ "$job" == "quil-node" ]; then
         sudo systemctl restart quil.service
     fi
     # Check if quil.service is updated by comparing /etc/systemd/system/quil.service and services/quil.service files
-    if diff /etc/systemd/system/quil.service services/quil.service; then
+    if diff /etc/systemd/system/quil.service /root/iron_script/services/quil.service; then
         echo "quil.service is up to date"
     else
         echo "quil.service is not up to date, updating quil.service"
-        sudo cp services/quil.service /etc/systemd/system/quil.service
+        sudo cp /root/iron_script/services/quil.service /etc/systemd/system/quil.service
         sudo systemctl daemon-reload
         sudo systemctl restart quil.service
     fi
