@@ -39,6 +39,23 @@ if [ "$job" == "quil-node" ]; then
         echo "New changes found, restarting Quil Node service"
         sudo systemctl restart quil.service
     fi
+    # Run git checkout release to switch to the release branch, if not already on the release branch, and restart the Quil Node service
+    if git branch | grep -q '* release'; then
+        echo "Already on release branch"
+    else
+        echo "Switching to release branch"
+        git checkout release
+        sudo systemctl restart quil.service
+    fi
+    # Check if quil.service is updated by comparing /etc/systemd/system/quil.service and services/quil.service files
+    if diff /etc/systemd/system/quil.service services/quil.service; then
+        echo "quil.service is up to date"
+    else
+        echo "quil.service is not up to date, updating quil.service"
+        sudo cp services/quil.service /etc/systemd/system/quil.service
+        sudo systemctl daemon-reload
+        sudo systemctl restart quil.service
+    fi
 fi
 
 if [ "$job" == "zora-node" ]; then
