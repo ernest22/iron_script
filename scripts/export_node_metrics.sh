@@ -21,6 +21,10 @@ if [ "$1" == "quil-node" ]; then
     LATEST_VERSION_LOG=$(echo "$LOG_OUTPUT" | grep "Quilibrium Node - v" | tail -1)
     LATEST_CHECKPEER_LOG=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "checking peer list" | tail -1)
     LATEST_MASTER_FRAME_LOG=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "master frame synchronization" | tail -1)
+    #{"level":"info","ts":1716869763.748067,"caller":"master/master_clock_consensus_engine.go:270","msg":"recalibrating difficulty metric","previous_difficulty_metric":149947,"next_difficulty_metric":148453}
+    #{"level":"info","ts":1716869763.7481942,"caller":"master/master_clock_consensus_engine.go:283","msg":"broadcasting self-test info","current_frame":1661386}
+    LATEST_DIFFICULTY_LOG=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "recalibrating difficulty metric" | tail -1)
+    LATEST_SELF_TEST_LOG=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "broadcasting self-test info" | tail -1)
     # Get leader frame from "returning leader frame" log
     LEADER_FRAME=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "returning leader frame" | tail -1)
 
@@ -33,6 +37,9 @@ if [ "$1" == "quil-node" ]; then
     HEAD_FRAME_NUMBER=$(echo "$LATEST_CHECKPEER_LOG" | grep -oP 'current_head_frame":\K\d+')
     MASTER_FRAME_HEAD=$(echo "$LATEST_MASTER_FRAME_LOG" | grep -oP 'master_frame_head":\K\d+')
     MAX_DATA_FRAME_TARGET=$(echo "$LATEST_MASTER_FRAME_LOG" | grep -oP 'max_data_frame_target":\K\d+')
+    PREVIOUS_DIFFICULTY=$(echo "$LATEST_DIFFICULTY_LOG" | grep -oP 'previous_difficulty_metric":\K\d+')
+    NEXT_DIFFICULTY=$(echo "$LATEST_DIFFICULTY_LOG" | grep -oP 'next_difficulty_metric":\K\d+')
+    CURRENT_FRAME=$(echo "$LATEST_SELF_TEST_LOG" | grep -oP 'current_frame":\K\d+')
     # Get version from log like Quilibrium Node - v1.4.13 – Sunset, only get the version number, i.e. 1.4.13
     NODE_VERSION=$(echo "$LATEST_VERSION_LOG" | grep -oP 'Quilibrium Node - v\K\d+\.\d+\.\d+')
     # If Latest Frame Number has no value, set it to the frame number from the leader frame log
@@ -91,6 +98,15 @@ if [ "$1" == "quil-node" ]; then
     fi
     if [ -n "$MAX_DATA_FRAME_TARGET" ]; then
         echo "quil_max_data_frame_target $MAX_DATA_FRAME_TARGET" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+    fi
+    if [ -n "$PREVIOUS_DIFFICULTY" ]; then
+        echo "quil_previous_difficulty $PREVIOUS_DIFFICULTY" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+    fi
+    if [ -n "$NEXT_DIFFICULTY" ]; then
+        echo "quil_next_difficulty $NEXT_DIFFICULTY" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+    fi
+    if [ -n "$CURRENT_FRAME" ]; then
+        echo "quil_current_frame $CURRENT_FRAME" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
 fi
 
