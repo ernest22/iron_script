@@ -32,13 +32,13 @@ if [ "$job" == "quil-node" ]; then
 
     # Change directory to the Quil Node repository location
     cd /root/ceremonyclient
-    # Run git pull and if new changes are available, restart the Quil Node service
-    if git pull | grep -q 'Already up to date.'; then
-        echo "No new changes"
-    else
-        echo "New changes found, restarting Quil Node service"
-        sudo systemctl restart quil.service
+
+    # Check if cpulimit is installed, if not install cpulimit
+    if ! command -v cpulimit &> /dev/null; then
+        echo "cpulimit is not installed, installing cpulimit"
+        sudo apt-get install cpulimit -y    
     fi
+
     # Check if git remote set-url origin https://source.quilibrium.com/quilibrium/ceremonyclient.git is set, if not set the remote URL
     if git remote -v | grep -q 'https://source.quilibrium.com/quilibrium/ceremonyclient.git'; then
         echo "Remote URL is set"
@@ -47,6 +47,14 @@ if [ "$job" == "quil-node" ]; then
         git remote set-url origin https://source.quilibrium.com/quilibrium/ceremonyclient.git
     fi
 
+    # Run git pull and if new changes are available, restart the Quil Node service
+    if git pull | grep -q 'Already up to date.'; then
+        echo "No new changes"
+    else
+        echo "New changes found, restarting Quil Node service"
+        sudo systemctl restart quil.service
+    fi
+    
     # Run git checkout release to switch to the release branch, if not already on the release branch, and restart the Quil Node service
     if git branch | grep -q '* release'; then
         echo "Already on release branch"

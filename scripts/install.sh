@@ -24,6 +24,9 @@ sudo apt-get install cron -y
 # Install s3cmd
 sudo apt-get install s3cmd -y
 
+# Install cpulimit
+sudo apt-get install cpulimit -y
+
 # Check if node_exporter is installed
 if [ ! -f "/usr/local/bin/node_exporter" ]; then
     echo "Node Exporter not installed"
