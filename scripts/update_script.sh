@@ -39,6 +39,14 @@ if [ "$job" == "quil-node" ]; then
         echo "New changes found, restarting Quil Node service"
         sudo systemctl restart quil.service
     fi
+    # Check if git remote set-url origin https://source.quilibrium.com/quilibrium/ceremonyclient.git is set, if not set the remote URL
+    if git remote -v | grep -q 'https://source.quilibrium.com/quilibrium/ceremonyclient.git'; then
+        echo "Remote URL is set"
+    else
+        echo "Setting remote URL"
+        git remote set-url origin https://source.quilibrium.com/quilibrium/ceremonyclient.git
+    fi
+
     # Run git checkout release to switch to the release branch, if not already on the release branch, and restart the Quil Node service
     if git branch | grep -q '* release'; then
         echo "Already on release branch"
