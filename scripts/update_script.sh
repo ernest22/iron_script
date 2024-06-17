@@ -56,11 +56,11 @@ if [ "$job" == "quil-node" ]; then
     fi
     
     # Run git checkout release to switch to the release branch, if not already on the release branch, and restart the Quil Node service
-    if git branch | grep -q '* release'; then
+    if git branch | grep -q '* release-cdn'; then
         echo "Already on release branch"
     else
         echo "Switching to release branch"
-        git checkout release
+        git checkout release-cdn
         sudo systemctl restart quil.service
     fi
     # Check if quil.service is updated by comparing /etc/systemd/system/quil.service and services/quil.service files

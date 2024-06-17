@@ -66,7 +66,7 @@ if [ "$1" = "quil-node" ]; then
     # Install Quil Client
     if [ ! -d "ceremonyclient" ]; then
         git clone https://source.quilibrium.com/quilibrium/ceremonyclient.git
-        git checkout release
+        git checkout release-cdn
     else
         echo "Directory ceremonyclient already exists"
     fi
