@@ -91,6 +91,8 @@ if [ "$job" == "quil-node" ]; then
         if ! cmp -s $CONFIG_FILE ${CONFIG_FILE}.bak ; then
             echo "Config file updated, restarting Quil Node service"
             sudo systemctl restart quil.service
+        else
+            echo "Config file is up to date"
         fi
 
         # Remove the backup file
