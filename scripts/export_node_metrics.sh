@@ -59,6 +59,28 @@ if [ "$1" == "quil-node" ]; then
     # Convert IN_ROUND to a numerical value (1 for true, 0 for false)
     IN_ROUND_NUM=$( [ "$IN_ROUND" == "true" ] && echo 1 || echo 0 )
 
+    get_node_info() {
+        # Run in /root/ceremonyclient/node
+        cd /root/ceremonyclient/node
+        version=$(cat config/version.go | grep -A 1 "func GetVersion() \[\]byte {" | grep -Eo '0x[0-9a-fA-F]+' | xargs printf "%d.%d.%d")
+        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+            if [[ $(uname -m) == "aarch64"* ]]; then
+                NODE_INFO=$(./node-$version-linux-arm64 --node-info)
+            else
+                NODE_INFO=$(./node-$version-linux-amd64 --node-info)
+            fi
+        elif [[ "$OSTYPE" == "darwin"* ]]; then
+            NODE_INFO=$(./node-$version-darwin-amd64 --node-info)
+        else
+            echo "unsupported OS for releases, please build from source"
+            NODE_INFO=""
+        fi
+        echo "$NODE_INFO"
+    }
+
+    # Get the node info
+    NODE_INFO=$(get_node_info)
+
     # Clear the file before writing new metrics
     > $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
 
