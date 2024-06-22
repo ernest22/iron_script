@@ -11,16 +11,16 @@ TEXTFILE_COLLECTOR_DIR="/var/lib/node_exporter/textfile_collector"
 
 # Check if the job is quil-node
 if [ "$1" == "quil-node" ]; then
-    LOG_OUTPUT=$(journalctl -u quil.service --since "1 week ago")
+    # LOG_OUTPUT=$(journalctl -u quil.service --since "1 week ago")
     LOG_OUTPUT_LAST_HOUR=$(journalctl -u quil.service --since "1 hour ago")
     # Extract the latest relevant log entries
     LATEST_APP_STATE_LOG=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "current application state" | tail -1)
     LATEST_PEERS_LOG=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "peers in store" | tail -1)
-    LATEST_FRAME_LOG=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "got clock frame" | tail -1)
-    LATEST_ROUND_LOG=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "\"round in progress\"" | tail -1)
-    LATEST_VERSION_LOG=$(echo "$LOG_OUTPUT" | grep "Quilibrium Node - v" | tail -1)
+    # LATEST_FRAME_LOG=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "got clock frame" | tail -1)
+    # LATEST_ROUND_LOG=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "\"round in progress\"" | tail -1)
+    # LATEST_VERSION_LOG=$(echo "$LOG_OUTPUT" | grep "Quilibrium Node - v" | tail -1)
     LATEST_CHECKPEER_LOG=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "checking peer list" | tail -1)
-    LATEST_MASTER_FRAME_LOG=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "master frame synchronization" | tail -1)
+    # LATEST_MASTER_FRAME_LOG=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "master frame synchronization" | tail -1)
     #{"level":"info","ts":1716869763.748067,"caller":"master/master_clock_consensus_engine.go:270","msg":"recalibrating difficulty metric","previous_difficulty_metric":149947,"next_difficulty_metric":148453}
     #{"level":"info","ts":1716869763.7481942,"caller":"master/master_clock_consensus_engine.go:283","msg":"broadcasting self-test info","current_frame":1661386}
     LATEST_DIFFICULTY_LOG=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "recalibrating difficulty metric" | tail -1)
@@ -29,7 +29,6 @@ if [ "$1" == "quil-node" ]; then
     LEADER_FRAME=$(echo "$LOG_OUTPUT_LAST_HOUR" | grep "returning leader frame" | tail -1)
 
     # Parse values from the log entries
-    MY_BALANCE=$(echo "$LATEST_APP_STATE_LOG" | grep -oP 'my_balance":\K\d+')
     LOBBY_STATE=$(echo "$LATEST_APP_STATE_LOG" | grep -oP 'lobby_state":"\K[^"]+')
     NETWORK_PEER_COUNT=$(echo "$LATEST_PEERS_LOG" | grep -oP 'network_peer_count":\K\d+')
     LATEST_FRAME_NUMBER=$(echo "$LATEST_FRAME_LOG" | grep -oP 'frame_number":\K\d+')
@@ -40,8 +39,8 @@ if [ "$1" == "quil-node" ]; then
     PREVIOUS_DIFFICULTY=$(echo "$LATEST_DIFFICULTY_LOG" | grep -oP 'previous_difficulty_metric":\K\d+')
     NEXT_DIFFICULTY=$(echo "$LATEST_DIFFICULTY_LOG" | grep -oP 'next_difficulty_metric":\K\d+')
     CURRENT_FRAME=$(echo "$LATEST_SELF_TEST_LOG" | grep -oP 'current_frame":\K\d+')
-    # Get version from log like Quilibrium Node - v1.4.13 – Sunset, only get the version number, i.e. 1.4.13
-    NODE_VERSION=$(echo "$LATEST_VERSION_LOG" | grep -oP 'Quilibrium Node - v\K\d+\.\d+\.\d+')
+    # # Get version from log like Quilibrium Node - v1.4.13 – Sunset, only get the version number, i.e. 1.4.13
+    # NODE_VERSION=$(echo "$LATEST_VERSION_LOG" | grep -oP 'Quilibrium Node - v\K\d+\.\d+\.\d+')
     # If Latest Frame Number has no value, set it to the frame number from the leader frame log
     # if [ -z "$LATEST_FRAME_NUMBER" ]; then
     #     # IF leader frame is not equal to 0, set the frame number to the leader frame number, else don't set it
@@ -80,48 +79,41 @@ if [ "$1" == "quil-node" ]; then
 
     # Get the node info
     NODE_INFO=$(get_node_info)
-    echo "$NODE_INFO"
 
     # Clear the file before writing new metrics
     > $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
 
     # Check if each value is set, and if yes, export the data
-    if [ -n "$MY_BALANCE" ]; then
-        echo "quil_my_balance $MY_BALANCE" > $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
-    fi
     if [ -n "$LOBBY_STATE" ]; then
         echo "quil_lobby_state{state=\"$LOBBY_STATE\"} 1" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
     if [ -n "$NETWORK_PEER_COUNT" ]; then
         echo "quil_network_peer_count $NETWORK_PEER_COUNT" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
-    if [ -n "$FRAME_NUMBER" ]; then
-        echo "quil_frame_number $FRAME_NUMBER" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
-    fi
-    if [ -n "$LEADER_FRAME_NUMBER" ]; then
-        echo "quil_leader_frame_number $LEADER_FRAME_NUMBER" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
-    fi
-    if [ -n "$LATEST_FRAME_NUMBER" ]; then
-        echo "quil_latest_frame_number $LATEST_FRAME_NUMBER" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
-    fi
-    if [ -n "$ROUND_FRAME_NUMBER" ]; then
-        echo "quil_round_frame_number $ROUND_FRAME_NUMBER" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
-    fi
+    # if [ -n "$FRAME_NUMBER" ]; then
+    #     echo "quil_frame_number $FRAME_NUMBER" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+    # fi
+    # if [ -n "$LEADER_FRAME_NUMBER" ]; then
+    #     echo "quil_leader_frame_number $LEADER_FRAME_NUMBER" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+    # fi
+    # if [ -n "$LATEST_FRAME_NUMBER" ]; then
+    #     echo "quil_latest_frame_number $LATEST_FRAME_NUMBER" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+    # fi
+    # if [ -n "$ROUND_FRAME_NUMBER" ]; then
+    #     echo "quil_round_frame_number $ROUND_FRAME_NUMBER" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+    # fi
     if [ -n "$IN_ROUND_NUM" ]; then
         echo "quil_in_round $IN_ROUND_NUM" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
-    if [ -n "$NODE_VERSION" ]; then
-        echo "node_version{version=\"$NODE_VERSION\"} 1" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
-    fi
-    if [ -n "$HEAD_FRAME_NUMBER" ]; then
-        echo "quil_head_frame_number $HEAD_FRAME_NUMBER" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
-    fi
-    if [ -n "$MASTER_FRAME_HEAD" ]; then
-        echo "quil_master_frame_head $MASTER_FRAME_HEAD" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
-    fi
-    if [ -n "$MAX_DATA_FRAME_TARGET" ]; then
-        echo "quil_max_data_frame_target $MAX_DATA_FRAME_TARGET" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
-    fi
+    # if [ -n "$HEAD_FRAME_NUMBER" ]; then
+    #     echo "quil_head_frame_number $HEAD_FRAME_NUMBER" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+    # fi
+    # if [ -n "$MASTER_FRAME_HEAD" ]; then
+    #     echo "quil_master_frame_head $MASTER_FRAME_HEAD" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+    # fi
+    # if [ -n "$MAX_DATA_FRAME_TARGET" ]; then
+    #     echo "quil_max_data_frame_target $MAX_DATA_FRAME_TARGET" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+    # fi
     if [ -n "$PREVIOUS_DIFFICULTY" ]; then
         echo "quil_previous_difficulty $PREVIOUS_DIFFICULTY" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
     fi
@@ -130,6 +122,39 @@ if [ "$1" == "quil-node" ]; then
     fi
     if [ -n "$CURRENT_FRAME" ]; then
         echo "quil_current_frame $CURRENT_FRAME" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+    fi
+    # if [ -n "$NODE_VERSION" ]; then
+    #     echo "node_version{version=\"$NODE_VERSION\"} 1" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+    # fi
+    if [ -n "$NODE_INFO" ]; then
+        # Extract Node info 
+        # Signature check passed
+        # Peer ID: QmYChWrt4bLxUAZhFRRqzBLXoFQyFAiXtJ7MSP6Ri7c2tF
+        # Version: 1.4.20-p0
+        # Max Frame: 381
+        # Peer Score: 0
+        # Note: Balance is strictly rewards earned with 1.4.19+, check https://www.quilibrium.com/rewards for more info about previous rewards.
+        # Unclaimed balance: 0.365400000000 QUIL
+        $PEER_ID=$(echo "$NODE_INFO" | grep -oP 'Peer ID: \K[^\n]+')
+        $VERSION=$(echo "$NODE_INFO" | grep -oP 'Version: \K[^\n]+')
+        $MAX_FRAME=$(echo "$NODE_INFO" | grep -oP 'Max Frame: \K[^\n]+')
+        $PEER_SCORE=$(echo "$NODE_INFO" | grep -oP 'Peer Score: \K[^\n]+')
+        $MY_BALANCE=$(echo "$NODE_INFO" | grep -oP 'Unclaimed balance: \K\d+\.\d+')
+        if [ -n "$PEER_ID" ]; then
+            echo "quil_peer_id{peer_id=\"$PEER_ID\"} 1" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+        fi
+        if [ -n "$VERSION" ]; then
+            echo "node_version{version=\"$VERSION\"} 1" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+        fi
+        if [ -n "$MAX_FRAME" ]; then
+            echo "quil_max_frame $MAX_FRAME" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+        fi
+        if [ -n "$PEER_SCORE" ]; then
+            echo "quil_peer_score $PEER_SCORE" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+        fi
+        if [ -n "$MY_BALANCE" ]; then
+            echo "quil_my_balance $MY_BALANCE" > $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+        fi
     fi
 fi
 
