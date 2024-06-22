@@ -135,11 +135,11 @@ if [ "$1" == "quil-node" ]; then
         # Peer Score: 0
         # Note: Balance is strictly rewards earned with 1.4.19+, check https://www.quilibrium.com/rewards for more info about previous rewards.
         # Unclaimed balance: 0.365400000000 QUIL
-        $PEER_ID=$(echo "$NODE_INFO" | grep -oP 'Peer ID: \K[^\n]+')
-        $VERSION=$(echo "$NODE_INFO" | grep -oP 'Version: \K[^\n]+')
-        $MAX_FRAME=$(echo "$NODE_INFO" | grep -oP 'Max Frame: \K[^\n]+')
-        $PEER_SCORE=$(echo "$NODE_INFO" | grep -oP 'Peer Score: \K[^\n]+')
-        $MY_BALANCE=$(echo "$NODE_INFO" | grep -oP 'Unclaimed balance: \K\d+\.\d+')
+        PEER_ID=$(echo "$NODE_INFO" | grep -oP 'Peer ID: \K[^\n]+')
+        VERSION=$(echo "$NODE_INFO" | grep -oP 'Version: \K[^\n]+')
+        MAX_FRAME=$(echo "$NODE_INFO" | grep -oP 'Max Frame: \K[^\n]+')
+        PEER_SCORE=$(echo "$NODE_INFO" | grep -oP 'Peer Score: \K[^\n]+')
+        MY_BALANCE=$(echo "$NODE_INFO" | grep -oP 'Unclaimed balance: \K\d+\.\d+')
         if [ -n "$PEER_ID" ]; then
             echo "quil_peer_id{peer_id=\"$PEER_ID\"} 1" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
         fi
