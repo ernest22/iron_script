@@ -80,10 +80,18 @@ if [ "$job" == "quil-node" ]; then
     # config.yml file is located at /root/ceremonyclient/node/.config/config.yml
     CONFIG_FILE="/root/ceremonyclient/node/.config/config.yml"
     if [ -f "$CONFIG_FILE" ]; then
+        # Change the listenMultiaddr, listenGrpcMultiaddr, and listenRESTMultiaddr settings in the config.yml file
         sed -i 's/listenMultiaddr: \/ip4\/0.0.0.0\/udp\/8336\/quic/listenMultiaddr: \/ip4\/0.0.0.0\/tcp\/8336/g' $CONFIG_FILE
+        LISTEN_MULTIADDR_UPDATED=$?
         sed -i 's/listenGrpcMultiaddr: ""/listenGrpcMultiaddr: \/ip4\/127.0.0.1\/tcp\/8337/g' $CONFIG_FILE
+        LISTEN_GRPC_MULTIADDR_UPDATED=$?
         sed -i 's/listenRESTMultiaddr: ""/listenRESTMultiaddr: \/ip4\/127.0.0.1\/tcp\/8338/g' $CONFIG_FILE
-        sudo systemctl restart quil.service
+        LISTEN_REST_MULTIADDR_UPDATED=$?
+
+        # If any updated, restart the Quil Node service
+        if [ $LISTEN_MULTIADDR_UPDATED -eq 0 ] || [ $LISTEN_GRPC_MULTIADDR_UPDATED -eq 0 ] || [ $LISTEN_REST_MULTIADDR_UPDATED -eq 0 ]; then
+            sudo systemctl restart quil.service
+        fi
     else
         echo "Error: $CONFIG_FILE not found."
     fi
