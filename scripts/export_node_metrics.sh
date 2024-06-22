@@ -80,6 +80,7 @@ if [ "$1" == "quil-node" ]; then
 
     # Get the node info
     NODE_INFO=$(get_node_info)
+    echo "$NODE_INFO"
 
     # Clear the file before writing new metrics
     > $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
