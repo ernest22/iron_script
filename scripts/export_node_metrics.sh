@@ -153,7 +153,7 @@ if [ "$1" == "quil-node" ]; then
             echo "quil_peer_score $PEER_SCORE" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
         fi
         if [ -n "$MY_BALANCE" ]; then
-            echo "quil_my_balance $MY_BALANCE" > $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
+            echo "quil_my_balance $MY_BALANCE" >> $TEXTFILE_COLLECTOR_DIR/quil_metrics.prom
         fi
     fi
 fi
