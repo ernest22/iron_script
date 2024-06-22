@@ -72,6 +72,22 @@ if [ "$job" == "quil-node" ]; then
         sudo systemctl daemon-reload
         sudo systemctl restart quil.service
     fi
+    # Check config.yml and see if the settings are set as 
+    # sed -i 's/listenMultiaddr: \/ip4\/0.0.0.0\/udp\/8336\/quic/listenMultiaddr: \/ip4\/0.0.0.0\/tcp\/8336/g' ~/ceremonyclient/node/.config/config.yml
+    # sed -i 's/listenGrpcMultiaddr: ""/listenGrpcMultiaddr: \/ip4\/127.0.0.1\/tcp\/8337/g' ~/ceremonyclient/node/.config/config.yml
+    # sed -i 's/listenRESTMultiaddr: ""/listenRESTMultiaddr: \/ip4\/127.0.0.1\/tcp\/8338/g' ~/ceremonyclient/node/.config/config.yml
+    # then restart the Quil Node service
+    # config.yml file is located at /root/ceremonyclient/node/.config/config.yml
+    CONFIG_FILE="/root/ceremonyclient/node/.config/config.yml"
+    if [ -f "$CONFIG_FILE" ]; then
+        sed -i 's/listenMultiaddr: \/ip4\/0.0.0.0\/udp\/8336\/quic/listenMultiaddr: \/ip4\/0.0.0.0\/tcp\/8336/g' $CONFIG_FILE
+        sed -i 's/listenGrpcMultiaddr: ""/listenGrpcMultiaddr: \/ip4\/127.0.0.1\/tcp\/8337/g' $CONFIG_FILE
+        sed -i 's/listenRESTMultiaddr: ""/listenRESTMultiaddr: \/ip4\/127.0.0.1\/tcp\/8338/g' $CONFIG_FILE
+        sudo systemctl restart quil.service
+    else
+        echo "Error: $CONFIG_FILE not found."
+    fi
+    
 fi
 
 if [ "$job" == "zora-node" ]; then
