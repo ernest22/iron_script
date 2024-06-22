@@ -90,6 +90,7 @@ if [ "$job" == "quil-node" ]; then
 
         # If any updated, restart the Quil Node service
         if [ $LISTEN_MULTIADDR_UPDATED -eq 0 ] || [ $LISTEN_GRPC_MULTIADDR_UPDATED -eq 0 ] || [ $LISTEN_REST_MULTIADDR_UPDATED -eq 0 ]; then
+            echo "Config file updated, restarting Quil Node service"
             sudo systemctl restart quil.service
         fi
     else
