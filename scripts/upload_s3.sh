@@ -43,9 +43,10 @@ then
 fi
 
 # Run your command and capture the output
-OUTPUT=$(cd /root/ceremonyclient/node/ && GOEXPERIMENT=arenas /usr/local/go/bin/go run ./... --peer-id)
+# Find Peer ID from cat /var/lib/node_exporter/textfile_collector/quil_metrics.prom
+OUTPUT=$(cat /var/lib/node_exporter/textfile_collector/quil_metrics.prom | grep "quil_peer_id")
 # Extract Peer ID
-PEER_ID=$(echo "$OUTPUT" | grep "Peer ID:" | awk '{print $3}')
+PEER_ID=$(echo "$OUTPUT" | awk -F'"' '{print $2}')
 # Check if PEER_ID is empty
 if [ -z "$PEER_ID" ]; then
     echo "Peer ID not found"
