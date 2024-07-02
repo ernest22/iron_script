@@ -57,7 +57,6 @@ fi
 count=`s3cmd ls "s3://$BUCKET_NAME/$PEER_ID/keys.yml" | wc -l`
 if [[ $count -gt 0 ]]; then
         echo "Private key already exists on s3://$BUCKET_NAME/$PEER_ID"
-        exit
 else
     # Upload the private key to the S3 bucket under the peer ID directory with encryption
     s3cmd put "$PRIVATE_KEY_PATH" "s3://$BUCKET_NAME/$PEER_ID/" --encrypt
@@ -73,7 +72,6 @@ fi
 count=`s3cmd ls "s3://$BUCKET_NAME/$PEER_ID/config.yml" | wc -l`
 if [[ $count -gt 0 ]]; then
         echo "Config file already exists on s3://$BUCKET_NAME/$PEER_ID"
-        exit
 else
     # Upload the config file to the S3 bucket under the peer ID directory with encryption
     s3cmd put "$CONFIG_KEY_PATH" "s3://$BUCKET_NAME/$PEER_ID/" --encrypt
@@ -89,7 +87,6 @@ fi
 count=`s3cmd ls "s3://$BUCKET_NAME/$PEER_ID/config" | wc -l`
 if [[ $count -gt 0 ]]; then
         echo "Config folder already exists on s3://$BUCKET_NAME/$PEER_ID"
-        exit
 else
     # Upload the config folder to the S3 bucket under the peer ID directory with encryption
     s3cmd put "$CONFIG_FOLDER_PATH" "s3://$BUCKET_NAME/$PEER_ID/config/" --recursive --encrypt
