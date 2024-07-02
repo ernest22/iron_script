@@ -84,7 +84,7 @@ else
 fi
 
 # Check if the config folder already exists on the S3 bucket
-count=`s3cmd ls "s3://$BUCKET_NAME/$PEER_ID/config" | wc -l`
+count=`s3cmd ls "s3://$BUCKET_NAME/$PEER_ID/config/" | wc -l`
 if [[ $count -gt 0 ]]; then
         echo "Config folder already exists on s3://$BUCKET_NAME/$PEER_ID"
 else
